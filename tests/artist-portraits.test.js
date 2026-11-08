@@ -89,3 +89,16 @@ test('ignores a cache entry written with an older version', async () => {
   assert.equal(await lookup.getPortrait('Versioned Artist'), null);
   assert.equal(calls, 1);
 });
+
+
+test('handles a browser that throws when localStorage is accessed', async () => {
+  const descriptor = Object.getOwnPropertyDescriptor(globalThis, 'localStorage');
+  Object.defineProperty(globalThis, 'localStorage', {configurable:true,get(){throw new Error('storage denied')}});
+  try {
+    const lookup = createPortraitLookup({fetchImpl:async()=>({ok:true,json:async()=>({search:[]})})});
+    assert.equal(await lookup.getPortrait('Storage Denied'), null);
+  } finally {
+    if (descriptor) Object.defineProperty(globalThis, 'localStorage', descriptor);
+    else delete globalThis.localStorage;
+  }
+});
