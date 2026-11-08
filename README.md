@@ -3,7 +3,7 @@
 A first, browser-only prototype for a small, invite-only music listening website.
 <br>
 **<p align="center">
-  <img src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExbzE4Mms2dXVxcm9hc25xNzVjYmw2OHMzbDVqNmtjYWxoNGtlOWZkdSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Nxq7x5o990oIPHUkay/giphy.gif" width="400" alt="Animated GIF" />
+  <img src="https://www.animaniacos.com/images/gifs/web/obras/obra0018.gif" width="400" alt="Animated GIF" />
 </p>**
 
 ## Preview locally
