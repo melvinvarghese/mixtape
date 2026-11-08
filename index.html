@@ -94,12 +94,8 @@ three:"https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&
 four:"https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=700&q=80"
 };
 const songs=[
-{id:1,title:"Varamanjalaadiya (Male Version)",artist:"K. J. Yesudas",composer:"Vidyasagar",lyricist:"Sachithanandan Puzhankara",film:"Pranayavarnangal",album:"Pranayavarnangal",year:"1998",lyricsUrl:"https://m3db.com/lyric/65316",duration:"5:03",image:images.one,src:"https://archive.org/download/varamanjalaadiya-male-version-vidyasagar-k-j-yesudas/Varamanjalaadiya%20%28Male%20Version%29%20-%20Vidyasagar%20-%20K%20J%20Yesudas.mp3"},
-{id:2,title:"The Long Way Home",artist:"Novo Amor",album:"Rooms We Remember",year:"2023",duration:"3:48",image:images.two,src:""},
-{id:3,title:"A Quiet Kind of Fire",artist:"Hollow Coves",album:"Small Hours",year:"2025",duration:"4:36",image:images.three,src:""},
-{id:4,title:"Paper Moons",artist:"Daughter",album:"Somewhere, Slowly",year:"2024",duration:"3:59",image:images.four,src:""},
-{id:5,title:"Before the City Wakes",artist:"Ben Howard",album:"Rooms We Remember",year:"2023",duration:"5:02",image:images.one,src:""},
-{id:6,title:"Light Through the Window",artist:"The Japanese House",album:"Small Hours",year:"2025",duration:"3:31",image:images.two,src:""}
+{id:1,title:"Onnu Thodanullil Theera Moham",artist:"P. Jayachandran",album:"",lyricsUrl:"https://msidb.org/s.php?13270",duration:"",image:images.one,src:"https://archive.org/download/onnu-thodanullil-theera-moham-p-jayachandran/Onnu%20Thodanullil%20Theera%20Moham%20%20P%20Jayachandran.mp3"},
+{id:2,title:"Varamanjalaadiya (Male Version)",artist:"K. J. Yesudas",composer:"Vidyasagar",lyricist:"Sachithanandan Puzhankara",film:"Pranayavarnangal",album:"Pranayavarnangal",year:"1998",lyricsUrl:"https://m3db.com/lyric/65316",duration:"5:03",image:images.two,src:"https://archive.org/download/varamanjalaadiya-male-version-vidyasagar-k-j-yesudas/Varamanjalaadiya%20%28Male%20Version%29%20-%20Vidyasagar%20-%20K%20J%20Yesudas.mp3"}
 ];
 const $=id=>document.getElementById(id),audio=new Audio();let current=null,queue=songs.slice(),queueIndex=0,shuffle=false,repeat=false;
 let liked=new Set();try{liked=new Set(JSON.parse(localStorage.getItem("mixtape-liked")||"[]"))}catch{}
