@@ -10,7 +10,7 @@
 
   // Use Commons' public redirect endpoint with filenames checked against file pages.
   const commonsFile = filename =>
-    'https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file/' +
+    'https://commons.wikimedia.org/wiki/Special:Redirect/file/' +
     encodeURIComponent(filename) + '&width=480';
 
   const MANUAL_PORTRAITS = {
