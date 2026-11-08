@@ -65,3 +65,27 @@ test('shares concurrent lookups for the same name', async () => {
   const [a,b] = await Promise.all([lookup.getPortrait('Unknown Person'),lookup.getPortrait(' unknown person ')]);
   assert.equal(a,null); assert.equal(b,null); assert.equal(calls,1);
 });
+
+
+test('caches misses briefly and retries after the negative cache expires', async () => {
+  let clock = 1000, calls = 0;
+  const fetchImpl = async () => { calls++; return {ok:true,json:async()=>({search:[]})}; };
+  const values = new Map();
+  const storage = {getItem:key=>values.get(key)??null,setItem:(key,value)=>values.set(key,value),removeItem:key=>values.delete(key)};
+  const lookup = harness({fetchImpl,storage,now:()=>clock});
+  assert.equal(await lookup.getPortrait('Missing Artist'), null);
+  assert.equal(await lookup.getPortrait('Missing Artist'), null);
+  assert.equal(calls, 1);
+  clock += 15 * 24 * 60 * 60 * 1000;
+  assert.equal(await lookup.getPortrait('Missing Artist'), null);
+  assert.equal(calls, 2);
+});
+
+test('ignores a cache entry written with an older version', async () => {
+  let calls = 0;
+  const values = new Map([['mixtape-artist-portraits-v1', JSON.stringify({version:0,entries:{'versioned artist':{version:0,savedAt:1000,url:'https://old.example/photo.jpg'}}})]]);
+  const storage = {getItem:key=>values.get(key)??null,setItem:(key,value)=>values.set(key,value),removeItem:key=>values.delete(key)};
+  const lookup = harness({fetchImpl:async()=>{calls++;return {ok:true,json:async()=>({search:[]})};},storage});
+  assert.equal(await lookup.getPortrait('Versioned Artist'), null);
+  assert.equal(calls, 1);
+});
