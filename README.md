@@ -1,6 +1,10 @@
 # Mixtape by Melvin
 
 A first, browser-only prototype for a small, invite-only music listening website.
+<br>
+**<p align="center">
+  <img src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExbzE4Mms2dXVxcm9hc25xNzVjYmw2OHMzbDVqNmtjYWxoNGtlOWZkdSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Nxq7x5o990oIPHUkay/giphy.gif" width="400" alt="Animated GIF" />
+</p>**
 
 ## Preview locally
 Open `index.html` in a modern browser. No build step or dependencies are required.
@@ -20,5 +24,4 @@ Open `index.html` in a modern browser. No build step or dependencies are require
 - There is no admin login, cloud storage, access control, or protected streaming yet.
 - A GitHub Pages deployment of this prototype is a public website. Do not add copyrighted audio or private files to this repository.
 
-## Next milestone
-Choose and verify a genuinely zero-cost storage and access-control architecture before connecting uploads or sharing links. A secret URL alone is not access control.
+
