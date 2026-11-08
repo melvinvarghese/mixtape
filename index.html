@@ -62,7 +62,7 @@
           <div class="eyebrow">A collection, not an algorithm</div>
           <h1>Songs that stay<br>with <em>you.</em></h1>
           <p class="hero-copy">A little corner of the internet for the music I keep coming back to. No recommendations, no noise. Just songs worth passing along.</p>
-          <div class="hero-buttons"><button class="primary-btn" id="play-collection">▶ &nbsp; Play the collection</button><button class="text-btn" id="browse-songs">Browse songs ↗</button></div>
+          <div class="hero-buttons"><button class="primary-btn" id="play-collection">▶ &nbsp; Play the collection</button><button class="text-btn" id="browse-songs">Browse songs ↗</button><button class="text-btn" id="load-local-audio">＋ Preview your own audio</button></div>
         </div>
         <div class="hero-art"><div class="feature-cover"><div class="cover-type"><small>THE MELVIN MIXTAPE · VOL. 01</small><strong>Somewhere<br>between<br>the songs.</strong></div></div></div>
       </section>
@@ -157,6 +157,7 @@
   });
   $("play-collection").addEventListener("click",()=>playSong(songs[0]));
   $("browse-songs").addEventListener("click",()=>showView("songs"));
+  $("load-local-audio").addEventListener("click",()=>$("audio-file").click());
   $("search").addEventListener("input",e=>{if($("library-view").hidden)showView("songs");renderLibrary("songs",e.target.value);});
   $("play-toggle").addEventListener("click",()=>{if(!current){playSong(songs[0]);return;}if(!current.src){$("audio-file").click();return;}if(audio.paused){audio.play();$("play-toggle").textContent="Ⅱ";}else{audio.pause();$("play-toggle").textContent="▶";}});
   $("next").addEventListener("click",nextSong);$("previous").addEventListener("click",()=>{if(audio.currentTime>3){audio.currentTime=0;return;}queueIndex=Math.max(0,queueIndex-1);playSong(queue[queueIndex]);});
