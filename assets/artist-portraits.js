@@ -3,14 +3,14 @@
   if (typeof module === 'object' && module.exports) module.exports = api;
   if (root) root.MixtapeArtistPortraits = api;
 })(typeof window !== 'undefined' ? window : globalThis, function () {
-  const CACHE_KEY = 'mixtape-artist-portraits-v4';
-  const CACHE_VERSION = 4;
+  const CACHE_KEY = 'mixtape-artist-portraits-v5';
+  const CACHE_VERSION = 5;
   const POSITIVE_TTL = 180 * 24 * 60 * 60 * 1000;
   const NEGATIVE_TTL = 14 * 24 * 60 * 60 * 1000;
 
   // Use Commons' public redirect endpoint with filenames checked against file pages.
   const commonsFile = filename =>
-    'https://commons.wikimedia.org/wiki/Special:Redirect/file/' +
+    'https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file/' +
     encodeURIComponent(filename) + '&width=480';
 
   const MANUAL_PORTRAITS = {
@@ -125,7 +125,7 @@
 
       const task = (async () => {
         let url = null;
-        try { url = await resolve(String(name).trim()); } catch { url = null; }
+        try { url = await resolve(String(name).trim()); } catch { return null; }
         const latest = readCache();
         latest[key] = { version: CACHE_VERSION, savedAt: now(), url: validImageUrl(url) };
         writeCache(latest);

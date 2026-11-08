@@ -28,7 +28,7 @@ test('verified manual portraits are available for the artists with Commons image
 test('manual portrait map contains only HTTPS Commons redirects', () => {
   assert.equal(Object.keys(MANUAL_PORTRAITS).length, 9);
   assert.ok(Object.values(MANUAL_PORTRAITS).every(url => url.startsWith('https://commons.wikimedia.org/')));
-  assert.equal(CACHE_KEY, 'mixtape-artist-portraits-v4');
+  assert.equal(CACHE_KEY, 'mixtape-artist-portraits-v5');
 });
 
 test('creates readable two-letter initials', () => {
@@ -51,8 +51,8 @@ test('caches a successful portrait lookup', async () => {
   };
   const lookup = harness({fetchImpl});
   assert.equal(await lookup.getPortrait('Test Artist'), 'https://upload.wikimedia.org/thumb/Test.jpg');
-  assert.equal(await lookup.getPortrait(' test artist '), 'https://commons.wikimedia.org/wiki/Special:FilePath/Test.jpg?width=480');
-  assert.equal(calls, 2);
+  assert.equal(await lookup.getPortrait(' test artist '), 'https://upload.wikimedia.org/thumb/Test.jpg');
+  assert.equal(calls, 3);
 });
 
 test('does not guess when entity search returns ambiguous candidates', async () => {
