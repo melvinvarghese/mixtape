@@ -2,9 +2,9 @@
 
 A first, browser-only prototype for a small, invite-only music listening website.
 <br>
-**<p align="center">
+<p align="center">
   <img src="https://www.animaniacos.com/images/gifs/web/obras/obra0018.gif" width="400" alt="Animated GIF" />
-</p>**
+</p>
 
 ## Preview locally
 Open `index.html` in a modern browser. No build step or dependencies are required.
