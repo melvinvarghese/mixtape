@@ -1,6 +1,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { createPortraitLookup } = require('../assets/artist-portraits.js');
+const { createPortraitLookup, MANUAL_PORTRAITS, CACHE_KEY } = require('../assets/artist-portraits.js');
 
 function harness({fetchImpl, storage, overrides = {}, now = () => 1000} = {}) {
   const values = new Map();
@@ -11,6 +11,25 @@ function harness({fetchImpl, storage, overrides = {}, now = () => 1000} = {}) {
   };
   return createPortraitLookup({fetchImpl: fetchImpl || (async () => { throw new Error('unexpected fetch'); }), storage: localStorage, overrides, now});
 }
+
+test('verified manual portraits are available for the artists with Commons images', async () => {
+  const lookup = createPortraitLookup({ storage: null });
+  for (const name of [
+    'K. J. Yesudas', 'P. Jayachandran', 'Sadhana Sargam', 'Srinivas',
+    'A. R. Rahman', 'Johnson', 'Vidyasagar',
+    'Kaithapram Damodaran Namboothiri', 'Vairamuthu'
+  ]) {
+    const url = await lookup.getPortrait(name);
+    assert.match(url, /^https:\/\/commons\.wikimedia\.org\/w\/index\.php\?title=Special:Redirect\/file\//);
+  }
+  assert.equal(await lookup.getPortrait('Sachithanandan Puzhankara'), null);
+});
+
+test('manual portrait map contains only HTTPS Commons redirects', () => {
+  assert.equal(Object.keys(MANUAL_PORTRAITS).length, 9);
+  assert.ok(Object.values(MANUAL_PORTRAITS).every(url => url.startsWith('https://commons.wikimedia.org/')));
+  assert.equal(CACHE_KEY, 'mixtape-artist-portraits-v4');
+});
 
 test('creates readable two-letter initials', () => {
   assert.equal(harness().getInitials('A. R. Rahman'), 'AR');
