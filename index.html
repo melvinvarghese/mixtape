@@ -86,7 +86,7 @@ body{font-size:15px}.brand strong{font-size:18px}.nav button{font-size:13px;padd
 </div>
 <nav class="mobile-nav" aria-label="Mobile navigation"><button class="active" data-view="home">⌂ &nbsp; HOME</button><button data-view="songs">≡ &nbsp; SONGS</button><button data-view="albums">▦ &nbsp; ALBUMS</button><button data-view="artists">◉ &nbsp; ARTISTS</button><button data-view="liked">♡ &nbsp; LIKED</button></nav>
 <section class="player" aria-label="Music player">
-<div class="now"><img id="now-art" src="https://i.ibb.co/yc6xcB8V/mixtape-hero-image.webp" alt="Mixtape cassette artwork"><div class="now-meta"><strong id="now-title">Select a track</strong><span id="now-artist">Mixtape by Melvin</span></div><button class="now-like" id="player-like" aria-label="Like this song">♡</button></div>
+<div class="now"><img id="now-art" src="assets/mixtape-hero-image.webp" alt="Mixtape cassette artwork"><div class="now-meta"><strong id="now-title">Select a track</strong><span id="now-artist">Mixtape by Melvin</span></div><button class="now-like" id="player-like" aria-label="Like this song">♡</button></div>
 <div class="player-center"><div class="controls"><button id="shuffle" aria-label="Shuffle" title="Shuffle">⤨</button><button class="skip" id="previous" aria-label="Previous track">|◀</button><button class="play" id="play-toggle" aria-label="Play or pause">▶</button><button class="skip" id="next" aria-label="Next track">▶|</button><button id="repeat" aria-label="Repeat" title="Repeat">↻</button></div><div class="timeline"><span id="current-time">0:00</span><input id="seek" type="range" min="0" max="100" value="0" aria-label="Seek through track"><span id="duration">0:00</span></div></div>
 <div class="volume"><span>VOL</span><input id="volume" type="range" min="0" max="1" step=".01" value=".8" aria-label="Volume"></div>
 </section>
@@ -156,7 +156,7 @@ async function loadSongs(){
   catch(error){loaded=await loadFeedJsonp()}
   songs=loaded;queue=songs.slice();
   if(!songs.length){$("song-count").textContent="No songs yet";$("recent-list").innerHTML='<div class="empty">No published songs with complete Mixtape metadata were found.</div>';$("home-albums").innerHTML="";return}
-  $("spotlight-image").src="https://i.ibb.co/yc6xcB8V/mixtape-hero-image.webp";$("spotlight-image").alt="Mixtape — vintage cassette hero artwork";
+  $("spotlight-image").src="assets/mixtape-hero-image.webp";$("spotlight-image").alt="Mixtape — vintage cassette hero artwork";
   renderHome();if(currentView!=="home")renderLibrary(currentView,$("search").value);
  }catch(error){$("song-count").textContent="Feed unavailable";$("recent-list").innerHTML='<div class="empty">We could not load the Blogger catalogue. Check your connection and refresh.</div>';$("home-albums").innerHTML="";toast("Could not load songs from Blogger.");console.error("Mixtape feed:",error)}
 }
