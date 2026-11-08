@@ -3,14 +3,25 @@
   if (typeof module === 'object' && module.exports) module.exports = api;
   if (root) root.MixtapeArtistPortraits = api;
 })(typeof window !== 'undefined' ? window : globalThis, function () {
-  const CACHE_KEY = 'mixtape-artist-portraits-v2';
-  const CACHE_VERSION = 2;
+  const CACHE_KEY = 'mixtape-artist-portraits-v3';
+  const CACHE_VERSION = 3;
   const POSITIVE_TTL = 180 * 24 * 60 * 60 * 1000;
   const NEGATIVE_TTL = 14 * 24 * 60 * 60 * 1000;
-  // Add a verified direct image URL here when Wikidata cannot safely identify someone.
-  const MANUAL_PORTRAITS = {};
+  // Verified Wikimedia Commons portraits. Keep names aligned with Mixtape credits.
+  const commonsFile = filename => 'https://commons.wikimedia.org/wiki/Special:FilePath/' + encodeURIComponent(filename) + '?width=480';
+  const MANUAL_PORTRAITS = {
+    'K. J. Yesudas': commonsFile('K.J. Yesudas.JPG'),
+    'P. Jayachandran': commonsFile('P Jayachandran.jpg'),
+    'Sadhana Sargam': commonsFile('Sadhana Sargam.jpg'),
+    'Srinivas': commonsFile('Srinivas01 (cropped).jpg'),
+    'A. R. Rahman': commonsFile('A. R. Rahman.jpg'),
+    'Johnson': commonsFile('Johnson (composer).jpg'),
+    'Vidyasagar': commonsFile('VidyaSagar.jpg'),
+    'Kaithapram Damodaran Namboothiri': commonsFile('Kaithapram damodaram namboothiri.jpg'),
+    'Vairamuthu': commonsFile('Vairamuthu-161111.jpg')
+  };
 
-  const normalize = name => String(name || '').normalize('NFKC').trim().replace(/\s+/g, ' ').toLocaleLowerCase();
+  const normalize = name => String(name || '').normalize('NFKC').trim().replace(/\\s+/g, ' ').toLocaleLowerCase();
   const validImageUrl = value => {
     try { const url = new URL(value); return url.protocol === 'https:' ? url.href : null; }
     catch { return null; }
@@ -32,9 +43,9 @@
       try { store?.setItem(CACHE_KEY, JSON.stringify({ version: CACHE_VERSION, entries })); } catch { /* Storage is optional. */ }
     }
     function getInitials(name) {
-      const words = String(name || '').trim().split(/\s+/).filter(Boolean);
+      const words = String(name || '').trim().split(/\\s+/).filter(Boolean);
       if (!words.length) return '?';
-      const letters = words.length === 1 ? words[0].replace(/[^\p{L}\p{N}]/gu, '').slice(0, 2) : words.slice(0, 2).map(word => word.replace(/[^\p{L}\p{N}]/gu, '').charAt(0)).join('');
+      const letters = words.length === 1 ? words[0].replace(/[^\\p{L}\\p{N}]/gu, '').slice(0, 2) : words.slice(0, 2).map(word => word.replace(/[^\\p{L}\\p{N}]/gu, '').charAt(0)).join('');
       return (letters || '?').toLocaleUpperCase();
     }
     async function request(url) {
@@ -48,7 +59,7 @@
       Object.entries({ action: 'wbsearchentities', search: name, language: 'en', uselang: 'en', type: 'item', limit: '10', format: 'json', origin: '*' }).forEach(([k,v]) => searchUrl.searchParams.set(k,v));
       const search = await request(searchUrl.href);
       const exact = (search.search || []).filter(item => normalize(item.label) === normalize(name));
-      if (exact.length !== 1 || !/^Q\d+$/.test(exact[0].id || '')) return null;
+      if (exact.length !== 1 || !/^Q\\d+$/.test(exact[0].id || '')) return null;
       const entityUrl = new URL('https://www.wikidata.org/w/api.php');
       Object.entries({ action: 'wbgetentities', ids: exact[0].id, props: 'claims', format: 'json', origin: '*' }).forEach(([k,v]) => entityUrl.searchParams.set(k,v));
       const data = await request(entityUrl.href);
