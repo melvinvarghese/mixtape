@@ -27,10 +27,11 @@ test('caches a successful portrait lookup', async () => {
   const fetchImpl = async url => {
     calls++;
     if (String(url).includes('wbsearchentities')) return {ok:true,json:async()=>({search:[{id:'Q1',label:'Test Artist',description:'Indian singer'}]})};
-    return {ok:true,json:async()=>({entities:{Q1:{claims:{P18:[{mainsnak:{datavalue:{value:'Test.jpg'}}}]}}}})};
+    if (String(url).includes('wbgetentities')) return {ok:true,json:async()=>({entities:{Q1:{claims:{P18:[{mainsnak:{datavalue:{value:'Test.jpg'}}}]}}}})};
+    return {ok:true,json:async()=>({query:{pages:{'1':{imageinfo:[{thumburl:'https://upload.wikimedia.org/thumb/Test.jpg'}]}}}})};
   };
   const lookup = harness({fetchImpl});
-  assert.equal(await lookup.getPortrait('Test Artist'), 'https://commons.wikimedia.org/wiki/Special:FilePath/Test.jpg?width=480');
+  assert.equal(await lookup.getPortrait('Test Artist'), 'https://upload.wikimedia.org/thumb/Test.jpg');
   assert.equal(await lookup.getPortrait(' test artist '), 'https://commons.wikimedia.org/wiki/Special:FilePath/Test.jpg?width=480');
   assert.equal(calls, 2);
 });
