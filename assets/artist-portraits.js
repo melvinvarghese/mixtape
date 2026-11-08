@@ -3,8 +3,8 @@
   if (typeof module === 'object' && module.exports) module.exports = api;
   if (root) root.MixtapeArtistPortraits = api;
 })(typeof window !== 'undefined' ? window : globalThis, function () {
-  const CACHE_KEY = 'mixtape-artist-portraits-v1';
-  const CACHE_VERSION = 1;
+  const CACHE_KEY = 'mixtape-artist-portraits-v2';
+  const CACHE_VERSION = 2;
   const POSITIVE_TTL = 180 * 24 * 60 * 60 * 1000;
   const NEGATIVE_TTL = 14 * 24 * 60 * 60 * 1000;
   // Add a verified direct image URL here when Wikidata cannot safely identify someone.
@@ -55,7 +55,12 @@
       const claims = data.entities?.[exact[0].id]?.claims || {};
       const file = claims.P18?.[0]?.mainsnak?.datavalue?.value;
       if (typeof file !== 'string' || !file.trim()) return null;
-      return 'https://commons.wikimedia.org/wiki/Special:FilePath/' + encodeURIComponent(file.trim()).replace(/%2F/g, '/') + '?width=480';
+      const commonsUrl = new URL('https://commons.wikimedia.org/w/api.php');
+      Object.entries({ action: 'query', titles: 'File:' + file.trim(), prop: 'imageinfo', iiprop: 'url', iiurlwidth: '480', format: 'json', origin: '*' }).forEach(([k,v]) => commonsUrl.searchParams.set(k,v));
+      const commons = await request(commonsUrl.href);
+      const pages = commons.query?.pages || {};
+      const imageInfo = Object.values(pages)[0]?.imageinfo?.[0];
+      return validImageUrl(imageInfo?.thumburl || imageInfo?.url);
     }
     async function getPortrait(name) {
       const key = normalize(name);
