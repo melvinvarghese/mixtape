@@ -18,7 +18,8 @@
 
   function createPortraitLookup({ fetchImpl, storage, overrides = MANUAL_PORTRAITS, now = Date.now } = {}) {
     const fetcher = fetchImpl || (typeof fetch === 'function' ? fetch.bind(globalThis) : null);
-    const store = storage === undefined ? (typeof localStorage !== 'undefined' ? localStorage : null) : storage;
+    let store = storage;
+    if (storage === undefined) { try { store = globalThis.localStorage || null; } catch { store = null; } }
     const pending = new Map();
 
     function readCache() {
