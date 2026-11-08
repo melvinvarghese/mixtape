@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#101112">
 <meta name="description" content="Mixtape by Melvin — a personal music collection.">
+<link rel="preload" as="image" href="assets/mixtape-hero-image.webp" fetchpriority="high">
 <title>Mixtape by Melvin</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -74,7 +75,7 @@ body{font-size:15px}.brand strong{font-size:18px}.nav button{font-size:13px;padd
 <header class="topbar"><div class="crumb" id="crumb">MY MUSIC / HOME</div><div class="top-actions"><span class="collection-label">THE COLLECTION</span><label class="search"><span>⌕</span><input id="search" type="search" placeholder="Search music" aria-label="Search music"></label></div></header>
 <section class="home" id="home">
 <div class="spotlight">
-<div class="spotlight-art"><img id="spotlight-image" src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=1000&q=85" alt="Featured music collection artwork"></div>
+<div class="spotlight-art"><img id="spotlight-image" src="assets/mixtape-hero-image.webp" alt="Mixtape — vintage cassette hero artwork" loading="eager" fetchpriority="high" decoding="async"></div>
 <div class="spotlight-info"><div class="eyebrow">A PERSONAL MUSIC COLLECTION</div><h1 id="spotlight-title">The Songs I Come Back To</h1><p>Songs I return to, hold on to, and never quite get tired of hearing.</p><div class="spotlight-meta"><span>Curated by <a class="curator-link" href="https://melvinvarghese.in/?utm_source=github_pages&amp;utm_medium=referral&amp;utm_campaign=mixtape" target="_blank" rel="noopener noreferrer">Melvin</a></span><span id="song-count">6 tracks</span></div><div class="actions"><button class="primary" id="play-collection">▶ &nbsp; Play collection</button><button class="secondary" id="browse-songs">Browse songs</button></div></div>
 </div>
 <section class="section"><div class="section-head"><div><h2>Recently added</h2><p>New arrivals in the collection</p></div><button class="view-all" data-goto="songs">VIEW ALL</button></div><div class="track-list" id="recent-list"></div></section>
