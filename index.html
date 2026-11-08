@@ -100,6 +100,21 @@ two:"https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fi
 three:"https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=700&q=80",
 four:"https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=700&q=80"
 };
+const fallbackCovers=[
+"https://i.ibb.co/Q3N7LTFc/mixtape-random-album-art1.webp",
+"https://i.ibb.co/RkczwBPv/mixtape-random-album-art2.webp",
+"https://i.ibb.co/zH0kkCyK/mixtape-random-album-art3.webp",
+"https://i.ibb.co/ymf3tsXJ/mixtape-random-album-art4.webp",
+"https://i.ibb.co/h1n1t8yC/mixtape-random-album-art5.webp",
+"https://i.ibb.co/ds4C8MQZ/mixtape-random-album-art6.webp",
+"https://i.ibb.co/zV0xPq14/mixtape-random-album-art7.webp"
+];
+function fallbackCover(seed){
+ const value=String(seed||"mixtape");
+ let hash=0;
+ for(let i=0;i<value.length;i++)hash=(hash*31+value.charCodeAt(i))>>>0;
+ return fallbackCovers[hash%fallbackCovers.length];
+}
 let songs=[];
 const $=id=>document.getElementById(id),audio=new Audio();let current=null,queue=songs.slice(),queueIndex=0,shuffle=false,repeat=false;
 let liked=new Set();try{liked=new Set(JSON.parse(localStorage.getItem("mixtape-liked")||"[]"))}catch{}
@@ -119,7 +134,8 @@ function parseFeed(data){
   const image=safeExternalUrl(doc.querySelector("img[src]")?.getAttribute("src")||"");
   if(!title||!src||!get("data-artist"))return null;
   const alternate=(entry.link||[]).find(x=>x.rel==="alternate")?.href||"";
-  return {id:String(entry.id?.$t||("song-"+index)),title,artist:get("data-artist"),composer:get("data-music-director"),lyricist:get("data-lyricist"),film:get("data-film"),album:get("data-album")||get("data-film")||"Singles",year:get("data-year"),duration:get("data-duration"),lyricsUrl:safeExternalUrl(get("data-lyrics-url")),src,image,postUrl:safeExternalUrl(alternate),published:entry.published?.$t||""};
+  const id=String(entry.id?.$t||("song-"+index));
+  return {id,title,artist:get("data-artist"),composer:get("data-music-director"),lyricist:get("data-lyricist"),film:get("data-film"),album:get("data-album")||get("data-film")||"Singles",year:get("data-year"),duration:get("data-duration"),lyricsUrl:safeExternalUrl(get("data-lyrics-url")),src,image:image||fallbackCover(id+"|"+title),postUrl:safeExternalUrl(alternate),published:entry.published?.$t||""};
  }).filter(Boolean).sort((a,b)=>Date.parse(b.published||0)-Date.parse(a.published||0));
 }
 function loadFeedJsonp(){
