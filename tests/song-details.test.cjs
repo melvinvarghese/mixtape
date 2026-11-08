@@ -4,7 +4,9 @@ const fs = require("node:fs");
 const path = require("node:path");
 
 const html = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
-const inlineScript = [...html.matchAll(/<script>([\\s\\S]*?)<\\/script>/g)].map(match => match[1]).join("\\n");
+const scriptStart = html.indexOf("<script>");
+const scriptEnd = html.indexOf("</script>", scriptStart);
+const inlineScript = html.slice(scriptStart + 8, scriptEnd);
 
 test("inline application JavaScript parses", () => {
   assert.doesNotThrow(() => new Function(inlineScript));
