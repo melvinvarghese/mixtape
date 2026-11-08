@@ -156,7 +156,7 @@ async function loadSongs(){
   catch(error){loaded=await loadFeedJsonp()}
   songs=loaded;queue=songs.slice();
   if(!songs.length){$("song-count").textContent="No songs yet";$("recent-list").innerHTML='<div class="empty">No published songs with complete Mixtape metadata were found.</div>';$("home-albums").innerHTML="";return}
-  $("spotlight-image").src=songs[0].image||images.one;$("spotlight-image").alt="Artwork for "+songs[0].album;
+  $("spotlight-image").src="https://i.ibb.co/yc6xcB8V/mixtape-hero-image.webp";$("spotlight-image").alt="Mixtape — vintage cassette hero artwork";
   renderHome();if(currentView!=="home")renderLibrary(currentView,$("search").value);
  }catch(error){$("song-count").textContent="Feed unavailable";$("recent-list").innerHTML='<div class="empty">We could not load the Blogger catalogue. Check your connection and refresh.</div>';$("home-albums").innerHTML="";toast("Could not load songs from Blogger.");console.error("Mixtape feed:",error)}
 }
