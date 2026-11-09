@@ -244,7 +244,13 @@ function showList(view,fromHash){
  routePageOpen=true;routeReturnView=back;activeRoute="#/"+view;
  if(!fromHash)pushHash(activeRoute);
 }
-const openView=view=>{if(view==="artists"||view==="albums")showList(view);else showView(view)};
+const openView=view=>{
+ if(view==="artists"||view==="albums"){showList(view);return}
+ // Leaving a deep-linked artist/album page must reset its route state as well as the URL.
+ shownSongId=null;detailViaPush=false;routePageOpen=false;activeRoute="";
+ if(location.hash.startsWith("#/"))history.replaceState(null,"",location.pathname+location.search);
+ showView(view,true);
+};
 function routeFromHash(){
  const decoded=safeDecode(location.hash);
  const listRoute=decoded.match(/^#\/(artists|albums)$/);
