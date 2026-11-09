@@ -73,6 +73,21 @@ body{font-size:15px}.brand strong{font-size:18px}.nav button{font-size:13px;padd
 main{padding-bottom:140px}.toast{bottom:138px}
 }
 </style>
+<style>
+.expand-btn{border:0;background:none;color:#c4c9c7;font-size:18px;padding:4px 8px;cursor:pointer;flex:none}.expand-btn:hover{color:#fff}.now{cursor:pointer}
+.np{position:fixed;inset:0;z-index:30;background:#101314;transform:translateY(100%);visibility:hidden;transition:transform .3s ease,visibility 0s .3s;overflow-y:auto;overscroll-behavior:contain}
+.np.open{transform:none;visibility:visible;transition:transform .3s ease}
+.np-inner{max-width:1100px;margin:0 auto;padding:18px 24px 40px;min-height:100%}
+.np-top{display:flex;align-items:center;gap:14px;padding-bottom:18px}.np-close{border:1px solid #414748;background:none;color:#e8ece8;width:38px;height:38px;border-radius:50%;font-size:20px;cursor:pointer;padding:0}.np-close:hover{background:#24292a}
+.np-body{display:grid;grid-template-columns:minmax(220px,420px) minmax(0,1fr);gap:clamp(24px,5vw,60px);align-items:center;padding-top:10px}
+.np-art{width:100%;aspect-ratio:1/1;object-fit:cover;background:#202627;box-shadow:0 20px 50px rgba(0,0,0,.45)}
+.np-title{font-size:clamp(28px,4vw,46px);line-height:1.1;letter-spacing:-1.3px;font-weight:500;margin:0 0 20px}
+.np-controls{margin:26px 0 8px}.np-timeline{display:flex;align-items:center;gap:12px;font:11px var(--mono);color:#9aa19e}.np-timeline input{flex:1}
+.np-buttons{display:flex;align-items:center;justify-content:center;gap:26px;margin-top:14px}.np-buttons button{border:0;background:none;color:#c4c9c7;font-size:17px;cursor:pointer;padding:6px}.np-buttons button:hover{color:#fff}.np-buttons .np-play{width:52px;height:52px;border-radius:50%;background:#eceeeb;color:#171a19;font-size:18px}.np-buttons .on{color:#fff;text-shadow:0 0 8px rgba(255,255,255,.4)}
+.np-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}.np-actions button{cursor:pointer}
+@media(max-width:700px){.np-inner{padding:14px 18px 34px}.np-body{grid-template-columns:1fr;gap:22px}.np-art{width:min(100%,320px);margin:0 auto;display:block}.np-title{font-size:30px;margin-bottom:16px}.np-buttons{gap:20px}.expand-btn{font-size:20px;padding:8px 10px}}
+body.np-lock{overflow:hidden}
+</style>
 </head>
 <body>
 <div class="app">
@@ -104,9 +119,13 @@ main{padding-bottom:140px}.toast{bottom:138px}
 </div>
 <nav class="mobile-nav" aria-label="Mobile navigation"><button class="active" data-view="home"><span class="mi">⌂</span><span>Home</span></button><button data-view="songs"><span class="mi">≡</span><span>Songs</span></button><button data-view="albums"><span class="mi">▦</span><span>Albums</span></button><button data-view="artists"><span class="mi">◉</span><span>Artists</span></button><button data-view="liked"><span class="mi">♡</span><span>Liked</span></button></nav>
 <section class="player" aria-label="Music player">
-<div class="now"><img id="now-art" src="assets/mixtape-hero-image.webp" alt="Mixtape cassette artwork"><div class="now-meta"><strong id="now-title">Select a track</strong><span id="now-artist">Mixtape by Melvin</span></div><button class="now-like" id="player-like" aria-label="Like this song">♡</button></div>
+<div class="now"><img id="now-art" src="assets/mixtape-hero-image.webp" alt="Mixtape cassette artwork"><div class="now-meta"><strong id="now-title">Select a track</strong><span id="now-artist">Mixtape by Melvin</span></div><button class="now-like" id="player-like" aria-label="Like this song">♡</button><button class="expand-btn" id="expand-player" aria-label="Open now playing" title="Now playing">⌃</button></div>
 <div class="player-center"><div class="controls"><button id="shuffle" aria-label="Shuffle" title="Shuffle">⤨</button><button class="skip" id="previous" aria-label="Previous track">|◀</button><button class="play" id="play-toggle" aria-label="Play or pause">▶</button><button class="skip" id="next" aria-label="Next track">▶|</button><button id="repeat" aria-label="Repeat" title="Repeat">↻</button></div><div class="timeline"><span id="current-time">0:00</span><input id="seek" type="range" min="0" max="100" value="0" aria-label="Seek through track"><span id="duration">0:00</span></div></div>
 <div class="volume"><span>VOL</span><input id="volume" type="range" min="0" max="1" step=".01" value=".8" aria-label="Volume"></div>
+</section>
+<section class="np" id="np" aria-label="Now playing" aria-hidden="true">
+<div class="np-inner"><div class="np-top"><button class="np-close" id="np-close" aria-label="Close now playing">⌄</button><span class="eyebrow">NOW PLAYING</span></div>
+<div class="np-body"><img class="np-art" id="np-art" alt=""><div class="np-info"><h2 class="np-title" id="np-title"></h2><div id="np-credits"></div><div class="np-controls"><div class="np-timeline"><span id="np-cur">0:00</span><input id="np-seek" type="range" min="0" max="100" value="0" aria-label="Seek through track"><span id="np-dur">0:00</span></div><div class="np-buttons"><button id="np-shuffle" aria-label="Shuffle">⤨</button><button id="np-prev" aria-label="Previous track">|◀</button><button class="np-play" id="np-play" aria-label="Play or pause">▶</button><button id="np-next" aria-label="Next track">▶|</button><button id="np-repeat" aria-label="Repeat">↻</button></div></div><div class="np-actions" id="np-actions"></div></div></div></div>
 </section>
 <input class="file-input" type="file" id="audio-file" accept="audio/mpeg,audio/mp3,audio/wav,audio/*">
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -135,7 +154,7 @@ function fallbackCover(seed){
  return fallbackCovers[hash%fallbackCovers.length];
 }
 let songs=[];
-const $=id=>document.getElementById(id),audio=new Audio();let current=null,queue=songs.slice(),queueIndex=0,shuffle=false,repeat=false;
+const $=id=>document.getElementById(id),audio=new Audio();let current=null,queue=songs.slice(),queueIndex=0,shuffle=true,repeat=false,history=[];
 let liked=new Set();try{liked=new Set(JSON.parse(localStorage.getItem("mixtape-liked")||"[]"))}catch{}
 const FEED_URL="https://mixtapebymelvin.blogspot.com/feeds/posts/default?alt=json&max-results=150";
 const albums=()=>[...new Set(songs.map(s=>s.album).filter(Boolean))];
@@ -268,17 +287,35 @@ function showSongDetails(song,fromHash){if(!song)return;detailReturnView=current
 function returnFromDetails(){clearRouteHash();$("song-detail").hidden=true;if(detailReturnView==="home"){$("home").hidden=false;$("library").hidden=true;$("crumb").textContent="MIXTAPE / HOME"}else{$("home").hidden=true;$("library").hidden=false;showView(detailReturnView);if(detailReturnSearch){$("search").value=detailReturnSearch;renderLibrary(detailReturnView,detailReturnSearch)}}window.scrollTo({top:0,behavior:"smooth"})}
 function playSong(song){if(!song)return;current=song;queueIndex=queue.findIndex(s=>s.id===song.id);$("now-title").textContent=song.title;$("now-artist").textContent=song.artist+(song.composer?" · Music: "+song.composer:"");$("now-art").src=song.image;$("player-like").textContent=liked.has(song.id)?"♥":"♡";document.querySelectorAll(".track").forEach(el=>el.classList.toggle("playing",Number(el.dataset.track)===song.id));if(song.src){audio.src=song.src;audio.play().then(()=>$("play-toggle").textContent="Ⅱ").catch(()=>toast("Press play to start."))}else{audio.pause();audio.removeAttribute("src");audio.load();$("play-toggle").textContent="▶";$("audio-file").value="";toast("Demo track selected. Add an audio file to preview it.")}}
 function toggleLike(id){id=String(id);liked.has(id)?liked.delete(id):liked.add(id);localStorage.setItem("mixtape-liked",JSON.stringify([...liked]));renderHome();if(!$("library").hidden){const v=$("library-title").textContent==="Liked songs"?"liked":$("library-title").textContent==="Albums"?"albums":"songs";renderLibrary(v,$("search").value)}if(current?.id===id)$("player-like").textContent=liked.has(id)?"♥":"♡"}
-function nextSong(){if(!queue.length)return;queueIndex=shuffle?Math.floor(Math.random()*queue.length):(queueIndex+1)%queue.length;playSong(queue[queueIndex])}
+function nextSong(){if(!queue.length)return;if(current)history.push(current.id);if(shuffle&&queue.length>1){let n;do{n=Math.floor(Math.random()*queue.length)}while(n===queueIndex);queueIndex=n}else queueIndex=(queueIndex+1)%queue.length;playSong(queue[queueIndex])}
 document.addEventListener("click",e=>{const person=e.target.closest("[data-credit-person]");if(person){showCredit(person.dataset.creditRole,person.dataset.creditPerson);return}const artistFilter=e.target.closest("[data-artist-filter]");if(artistFilter){e.stopPropagation();showCredit("artist",artistFilter.dataset.artistFilter);return}const albumFilter=e.target.closest("[data-album-filter]");if(albumFilter){e.stopPropagation();showAlbum(albumFilter.dataset.albumFilter);return}const composerFilter=e.target.closest("[data-composer-filter]");if(composerFilter){e.stopPropagation();const value=composerFilter.dataset.composerFilter;if(!value)return;showCredit("composer",value);return}const sharePage=e.target.closest("[data-share-page]");if(sharePage){copyLink(location.href);return}const details=e.target.closest("[data-details]");if(details){e.stopPropagation();showSongDetails(songs.find(s=>s.id===details.dataset.details));return}const play=e.target.closest("[data-play]");if(play){e.stopPropagation();playSong(songs.find(s=>s.id===play.dataset.play));return}const like=e.target.closest("[data-like]");if(like){e.stopPropagation();toggleLike(like.dataset.like);return}const album=e.target.closest("[data-album]");if(album){showAlbum(album.dataset.album);return}const nav=e.target.closest("[data-view]");if(nav)openView(nav.dataset.view);const goto=e.target.closest("[data-goto]");if(goto)openView(goto.dataset.goto)});
 $("play-collection").addEventListener("click",()=>{if(songs.length){const randomIndex=Math.floor(Math.random()*songs.length);playSong(songs[randomIndex])}});$("browse-songs").addEventListener("click",()=>showView("songs"));
 $("search").addEventListener("input",e=>{clearRouteHash();if($("library").hidden)showView("songs");renderLibrary("songs",e.target.value)});
-$("play-toggle").addEventListener("click",()=>{if(!current){if(songs[0])playSong(songs[0]);else toast("The catalogue is still loading.");return}if(!current.src){$("audio-file").click();return}if(audio.paused){audio.play();$("play-toggle").textContent="Ⅱ"}else{audio.pause();$("play-toggle").textContent="▶"}});
-$("next").addEventListener("click",nextSong);$("previous").addEventListener("click",()=>{if(audio.currentTime>3){audio.currentTime=0;return}queueIndex=Math.max(0,queueIndex-1);playSong(queue[queueIndex])});
+$("play-toggle").addEventListener("click",()=>{if(!current){if(songs.length)playSong(shuffle?songs[Math.floor(Math.random()*songs.length)]:songs[0]);else toast("The catalogue is still loading.");return}if(!current.src){$("audio-file").click();return}if(audio.paused){audio.play();$("play-toggle").textContent="Ⅱ"}else{audio.pause();$("play-toggle").textContent="▶"}});
+$("next").addEventListener("click",nextSong);$("previous").addEventListener("click",()=>{if(audio.currentTime>3){audio.currentTime=0;return}if(shuffle&&history.length){const back=queue.find(x=>x.id===history.pop());if(back){playSong(back);return}}queueIndex=Math.max(0,queueIndex-1);playSong(queue[queueIndex])});
 $("shuffle").addEventListener("click",()=>{shuffle=!shuffle;$("shuffle").style.color=shuffle?"#fff":"";toast(shuffle?"Shuffle on":"Shuffle off")});$("repeat").addEventListener("click",()=>{repeat=!repeat;audio.loop=repeat;$("repeat").style.color=repeat?"#fff":"";toast(repeat?"Repeat on":"Repeat off")});
 $("player-like").addEventListener("click",()=>{if(current)toggleLike(current.id)});$("volume").addEventListener("input",e=>audio.volume=Number(e.target.value));$("seek").addEventListener("input",e=>{if(audio.duration)audio.currentTime=audio.duration*Number(e.target.value)/100});
 audio.addEventListener("timeupdate",()=>{if(audio.duration){$("seek").value=audio.currentTime/audio.duration*100;$("current-time").textContent=time(audio.currentTime);$("duration").textContent=time(audio.duration)}});audio.addEventListener("ended",()=>{if(!repeat)nextSong()});
 $("audio-file").addEventListener("change",e=>{const file=e.target.files[0];if(!file)return;const url=URL.createObjectURL(file);const song=current||songs[0];if(!song)return;song.src=url;song.title=file.name.replace(/\.[^.]+$/,"");$("now-title").textContent=song.title;audio.src=url;audio.play().then(()=>$("play-toggle").textContent="Ⅱ").catch(()=>{});toast("Local preview only — this file is not uploaded.")});
-$("detail-back").addEventListener("click",()=>{if(detailViaPush){detailViaPush=false;history.back()}else{returnFromDetails()}});window.addEventListener("hashchange",routeFromHash);renderHome();audio.volume=.8;loadSongs();
+$("detail-back").addEventListener("click",()=>{if(detailViaPush){detailViaPush=false;history.back()}else{returnFromDetails()}});window.addEventListener("hashchange",routeFromHash);
+const np=$("np");let npSong=null;
+function npCredit(label,value,role,primary){return value?'<div class="detail-credit '+(primary?"primary-credit":"")+'"><strong>'+label+'</strong><div>'+splitCredits(value).map(n=>'<button class="track-link detail-credit-link" data-credit-person="'+escapeHtml(n)+'" data-credit-role="'+role+'">'+escapeHtml(n)+'</button>').join("")+'</div></div>':""}
+function npRender(){if(!current)return;if(npSong!==current.id){npSong=current.id;const c=current;$("np-art").src=c.image;$("np-art").alt="Artwork for "+c.title;$("np-title").textContent=c.title;$("np-credits").innerHTML=npCredit("Singer",c.artist,"artist",true)+npCredit("Music director / composer",c.composer,"composer",true)+npCredit("Lyricist",c.lyricist,"lyricist",false)+'<div class="detail-meta">'+(c.album?'<span><button class="track-link detail-album-link" data-album-filter="'+escapeHtml(c.album)+'">'+escapeHtml(c.album)+'</button></span>':"")+(c.year?'<span>'+escapeHtml(c.year)+'</span>':"")+'</div>';$("np-actions").innerHTML=(safeExternalUrl(c.lyricsUrl)?'<a class="lyrics-link" href="'+escapeHtml(safeExternalUrl(c.lyricsUrl))+'" target="_blank" rel="noopener noreferrer">View Lyrics ↗</a>':"")+'<button class="secondary" id="np-share" type="button">Copy link</button><button class="secondary" data-details="'+escapeHtml(c.id)+'" type="button">Open song page</button>'}
+$("np-play").textContent=audio.paused?"▶":"Ⅱ";$("np-shuffle").classList.toggle("on",shuffle);$("np-repeat").classList.toggle("on",repeat)}
+function npProgress(){if(audio.duration){$("np-seek").value=audio.currentTime/audio.duration*100;$("np-cur").textContent=time(audio.currentTime);$("np-dur").textContent=time(audio.duration)}}
+function openNp(){if(!current){toast("Pick a song first.");return}npRender();npProgress();np.classList.add("open");np.setAttribute("aria-hidden","false");document.body.classList.add("np-lock");$("np-close").focus()}
+function closeNp(){np.classList.remove("open");np.setAttribute("aria-hidden","true");document.body.classList.remove("np-lock")}
+$("expand-player").addEventListener("click",e=>{e.stopPropagation();openNp()});
+document.querySelector(".player .now").addEventListener("click",e=>{if(e.target.closest("#player-like,#expand-player"))return;openNp()});
+$("np-close").addEventListener("click",closeNp);document.addEventListener("keydown",e=>{if(e.key==="Escape"&&np.classList.contains("open"))closeNp()});
+$("np-play").addEventListener("click",()=>$("play-toggle").click());$("np-next").addEventListener("click",()=>$("next").click());$("np-prev").addEventListener("click",()=>$("previous").click());$("np-shuffle").addEventListener("click",()=>{$("shuffle").click();npRender()});$("np-repeat").addEventListener("click",()=>{$("repeat").click();npRender()});
+$("np-seek").addEventListener("input",e=>{if(audio.duration)audio.currentTime=audio.duration*Number(e.target.value)/100});
+np.addEventListener("click",e=>{if(e.target.closest("#np-share")){if(current)shareSong(current);return}if(e.target.closest("[data-credit-person],[data-album-filter],[data-details]"))closeNp()});
+["play","pause","ended","timeupdate"].forEach(ev=>audio.addEventListener(ev,()=>{if(np.classList.contains("open")){npRender();npProgress()}}));
+new MutationObserver(()=>{if(np.classList.contains("open"))npRender()}).observe($("now-title"),{childList:true,characterData:true,subtree:true});
+let npY=null;np.addEventListener("touchstart",e=>{npY=np.scrollTop===0?e.touches[0].clientY:null},{passive:true});np.addEventListener("touchend",e=>{if(npY!==null&&e.changedTouches[0].clientY-npY>90)closeNp();npY=null});
+$("shuffle").style.color="#fff";
+renderHome();audio.volume=.8;loadSongs();
 })();
 </script>
 </body>
