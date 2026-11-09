@@ -157,7 +157,7 @@ let songs=[];
 const $=id=>document.getElementById(id),audio=new Audio();let current=null,queue=songs.slice(),queueIndex=0,shuffle=true,repeat=false,history=[];
 let liked=new Set();try{liked=new Set(JSON.parse(localStorage.getItem("mixtape-liked")||"[]"))}catch{}
 const FEED_URL="https://mixtapebymelvin.blogspot.com/feeds/posts/default?alt=json&max-results=150";
-const cleanAlbumName=value=>String(value||"").replace(/\\s*\\(Original Motion Picture Soundtrack\\)\\s*/ig,"").trim();
+const cleanAlbumName=value=>String(value||"").replace(/\s*\(Original Motion Picture Soundtrack\)\s*/ig,"").trim();
 const albums=()=>[...new Set(songs.map(s=>s.album).filter(Boolean))];
 const splitCredits=value=>String(value||"").split(/[,|]/).map(x=>x.trim()).filter(Boolean);
 const peopleByRole=role=>[...new Set(songs.flatMap(song=>splitCredits(song[role])))].sort((a,b)=>a.localeCompare(b));
