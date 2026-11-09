@@ -310,12 +310,7 @@ document.addEventListener("click",e=>{
  if(!nav)return;
  e.preventDefault();
  e.stopImmediatePropagation();
- const view=nav.dataset.view;
- // Navigate directly from deep routes, regardless of the current hash or route state.
- shownSongId=null;detailViaPush=false;routePageOpen=false;routeReturnView="home";activeRoute="";
- if(location.hash.startsWith("#/"))history.replaceState(null,"",location.pathname+location.search);
- if(view==="artists"||view==="albums")showList(view);
- else showView(view);
+ openView(nav.dataset.view);
 },true);
 document.addEventListener("click",e=>{const lang=e.target.closest("[data-language-filter]");if(lang){e.stopPropagation();showLanguage(lang.dataset.languageFilter);return}const person=e.target.closest("[data-credit-person]");if(person){showCredit(person.dataset.creditRole,person.dataset.creditPerson);return}const artistFilter=e.target.closest("[data-artist-filter]");if(artistFilter){e.stopPropagation();showCredit("artist",artistFilter.dataset.artistFilter);return}const albumFilter=e.target.closest("[data-album-filter]");if(albumFilter){e.stopPropagation();showAlbum(albumFilter.dataset.albumFilter);return}const composerFilter=e.target.closest("[data-composer-filter]");if(composerFilter){e.stopPropagation();const value=composerFilter.dataset.composerFilter;if(!value)return;showCredit("composer",value);return}const sharePage=e.target.closest("[data-share-page]");if(sharePage){copyLink(location.href);return}const details=e.target.closest("[data-details]");if(details){e.stopPropagation();showSongDetails(songs.find(s=>s.id===details.dataset.details));return}const play=e.target.closest("[data-play]");if(play){e.stopPropagation();playSong(songs.find(s=>s.id===play.dataset.play));return}const like=e.target.closest("[data-like]");if(like){e.stopPropagation();toggleLike(like.dataset.like);return}const album=e.target.closest("[data-album]");if(album){showAlbum(album.dataset.album);return}const nav=e.target.closest("[data-view]");if(nav)openView(nav.dataset.view);const goto=e.target.closest("[data-goto]");if(goto)openView(goto.dataset.goto)});
 $("play-collection").addEventListener("click",()=>{if(songs.length){const randomIndex=Math.floor(Math.random()*songs.length);playSong(songs[randomIndex])}});$("browse-songs").addEventListener("click",()=>showView("songs"));
