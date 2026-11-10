@@ -1,8 +1,8 @@
 # Mixtape by Melvin
 
-A responsive Malayalam music catalogue and listening interface. Song entries are managed in Blogger; the website reads the public Blogger feed automatically.
+A personal mixtape of my favourite songs, with a responsive listening interface. Song entries are managed in Blogger; the website reads the public Blogger feed automatically.
 
-## Live catalogue source
+## Where the songs come from
 
 - Blogger: https://mixtapebymelvin.blogspot.com/
 - Feed: https://mixtapebymelvin.blogspot.com/feeds/posts/default?alt=json
@@ -19,7 +19,7 @@ The feed parser skips posts that do not have the metadata block, a title, an art
 
 ## Features
 
-- Blogger-powered song catalogue with JSON feed and JSONP fallback
+- Songs managed in Blogger, loaded with JSON feed and JSONP fallback
 - Search across titles, artists, albums and credits
 - Browsing by songs, albums and artists
 - Automatic artist portraits from Wikidata/Wikimedia Commons when a unique exact-name match and image are available
@@ -47,4 +47,4 @@ For a verified portrait that is missing from Wikidata, add an HTTPS image URL to
 
 ## Local preview
 
-Open `index.html` in a modern browser. No build step or paid service is required. The Blogger feed must be publicly accessible for the catalogue to load.
+Open `index.html` in a modern browser. No build step or paid service is required. The Blogger feed must be publicly accessible for the songs to load.
