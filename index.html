@@ -165,7 +165,7 @@ const peopleByRole=role=>[...new Set(songs.flatMap(song=>splitCredits(song[role]
 const songsForCredit=(role,name)=>songs.filter(song=>splitCredits(song[role]).includes(name));
 function parseFeed(data){
  const entries=data?.feed?.entry;
- if(!Array.isArray(entries))throw new Error("Invalid Blogger feed");
+ if(!Array.isArray(entries))throw new Error("Invalid song feed");
  return entries.map((entry,index)=>{
   const doc=new DOMParser().parseFromString(entry.content?.$t||"","text/html");
   const meta=doc.querySelector(".mixtape-data");
@@ -184,9 +184,9 @@ function loadFeedJsonp(){
  return new Promise((resolve,reject)=>{
   const callback="__mixtapeBloggerFeed",script=document.createElement("script");let finished=false;
   const cleanup=()=>{if(finished)return;finished=true;clearTimeout(timer);delete window[callback];script.remove()};
-  const timer=setTimeout(()=>{cleanup();reject(new Error("Blogger feed timed out"))},12000);
+  const timer=setTimeout(()=>{cleanup();reject(new Error("Song feed timed out"))},12000);
   window[callback]=data=>{cleanup();try{resolve(parseFeed(data))}catch(error){reject(error)}};
-  script.onerror=()=>{cleanup();reject(new Error("Could not reach Blogger"))};
+  script.onerror=()=>{cleanup();reject(new Error("Could not reach the song feed"))};
   script.src=FEED_URL.replace("alt=json","alt=json-in-script")+"&callback="+callback;document.head.appendChild(script);
  });
 }
@@ -200,7 +200,7 @@ async function loadSongs(){
   if(!songs.length){$("song-count").textContent="No songs yet";$("recent-list").innerHTML='<div class="empty">No published songs with complete Mixtape metadata were found.</div>';$("home-albums").innerHTML="";return}
   $("spotlight-image").src="assets/mixtape-hero-image.webp";$("spotlight-image").alt="Mixtape — vintage cassette hero artwork";
   renderHome();if(currentView!=="home")renderLibrary(currentView,$("search").value);routeFromHash();
- }catch(error){$("song-count").textContent="Feed unavailable";$("recent-list").innerHTML='<div class="empty">We could not load the songs from Blogger. Check your connection and refresh.</div>';$("home-albums").innerHTML="";toast("Could not load songs from Blogger.");console.error("Mixtape feed:",error)}
+ }catch(error){$("song-count").textContent="Feed unavailable";$("recent-list").innerHTML='<div class="empty">We could not load the songs. Check your connection and refresh.</div>';$("home-albums").innerHTML="";toast("Could not load songs.");console.error("Mixtape feed:",error)}
 }
 const toast=message=>{$("toast").textContent=message;$("toast").classList.add("show");clearTimeout(toast.timer);toast.timer=setTimeout(()=>$("toast").classList.remove("show"),2200)};
 const time=s=>Number.isFinite(s)?Math.floor(s/60)+":"+String(Math.floor(s%60)).padStart(2,"0"):"0:00";
