@@ -89,6 +89,13 @@ main{padding-bottom:140px}.toast{bottom:138px}
 .np-buttons{display:flex;align-items:center;justify-content:center;gap:26px;margin-top:14px}.np-buttons button{border:0;background:none;color:#c4c9c7;font-size:17px;cursor:pointer;padding:6px}.np-buttons button:hover{color:#fff}.np-buttons .np-play{width:52px;height:52px;border-radius:50%;background:#eceeeb;color:#171a19;font-size:18px}.np-buttons .on{color:#fff;text-shadow:0 0 8px rgba(255,255,255,.4)}
 .np-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}.np-actions button{cursor:pointer}
 @media(max-width:700px){.np-inner{padding:14px 18px 34px}.np-body{grid-template-columns:1fr;gap:22px}.np-art{width:min(100%,320px);margin:0 auto;display:block}.np-title{font-size:30px;margin-bottom:16px}.np-buttons{gap:20px}.expand-btn{font-size:20px;padding:8px 10px}}
+/* Tighten song title-to-artist spacing in track rows. */
+.track-name{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px}
+.track-title-line{margin:0!important;line-height:1.2}
+.track-title{line-height:1.2!important}
+.track-singers{margin:0!important;padding:0!important;line-height:1.2!important}
+.track-singers .track-link{line-height:1.2!important;padding-top:0!important;padding-bottom:0!important;margin-top:0!important;margin-bottom:0!important}
+.track-name>.track-link{margin-top:0!important;line-height:1.2!important}
 body.np-lock{overflow:hidden}
 /* Recent songs: force a responsive horizontal card shelf on every screen size. */
 #recent-list.track-list{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;align-items:flex-start!important;justify-content:flex-start!important;gap:14px!important;width:100%!important;max-width:100%!important;overflow-x:auto!important;overflow-y:hidden!important;white-space:normal!important}
