@@ -8,29 +8,37 @@
   const POSITIVE_TTL = 180 * 24 * 60 * 60 * 1000;
   const NEGATIVE_TTL = 14 * 24 * 60 * 60 * 1000;
 
-  // Use Commons' public redirect endpoint with filenames checked against file pages.
-  const commonsFile = filename =>
-    'https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file/' +
-    encodeURIComponent(filename) + '&width=480';
+  // Portraits saved in this repo (assets/artists/); assets/artists/SOURCES.md records where each one came from.
+  // Anyone not listed here is looked up on Wikidata/Wikimedia Commons at run time, and shows initials if nothing is found.
+  const local = file => 'assets/artists/' + file;
 
   const MANUAL_PORTRAITS = {
-    'Ilaiyaraaja': commonsFile('Ilaiyaraaja at the TFPC Press Meet Held Ahead Of The ‘Ilaiyaraaja 75’ Concert.jpg'),
-    'M. S. Viswanathan': commonsFile('Msviswanathan.JPG'),
-    // Hosted on English Wikipedia (not Commons), so it needs a direct upload URL.
-    'Bombay Ravi': 'https://upload.wikimedia.org/wikipedia/en/8/8d/Bombay-ravi.jpg',
-    'K. J. Yesudas': commonsFile('K.J. Yesudas.JPG'),
-    'P. Jayachandran': commonsFile('P Jayachandran.jpg'),
-    'Sadhana Sargam': commonsFile('Sadhana Sargam.jpg'),
-    'Srinivas': commonsFile('Srinivas01 (cropped).jpg'),
-    'A. R. Rahman': commonsFile('A. R. Rahman.jpg'),
-    'Johnson': commonsFile('Johnson (composer).jpg'),
-    'Vidyasagar': commonsFile('VidyaSagar.jpg'),
-    'Kaithapram Damodaran Namboothiri': commonsFile('Kaithapram Damodaran Namboothiri.jpg'),
-    'Vairamuthu': commonsFile('Pratibha Devisingh Patil presenting the Rajat Kamal Award to Shri Vairamuthu for the Best Lyrics (Tamil Thenmerkku Paruvakkatru), at the 58th National Film Awards function, in New Delhi on September 09, 2011 (cropped).jpg')
+    'Ilaiyaraaja': local('ilaiyaraaja.jpg'),
+    'M. S. Viswanathan': local('m-s-viswanathan.jpg'),
+    'Bombay Ravi': local('bombay-ravi.jpg'),
+    'Sujatha': local('sujatha.jpg'),
+    'Vaali': local('vaali.jpg'),
+    'Gireesh Puthenchery': local('gireesh-puthenchery.webp'),
+    'Yusufali Kechery': local('yusufali-kechery.jpg'),
+    'Sachithanandan Puzhankara': local('sachithanandan-puzhankara.jpg'),
+    'S. P. Balasubrahmanyam': local('s-p-balasubrahmanyam.jpg'),
+    'R. V. Udayakumar': local('r-v-udayakumar.jpg'),
+    'K. J. Yesudas': local('k-j-yesudas.jpg'),
+    'P. Jayachandran': local('p-jayachandran.jpg'),
+    'Sadhana Sargam': local('sadhana-sargam.jpg'),
+    'Srinivas': local('srinivas.jpg'),
+    'A. R. Rahman': local('a-r-rahman.jpg'),
+    'Johnson': local('johnson.jpg'),
+    'Vidyasagar': local('vidyasagar.jpg'),
+    'Kaithapram Damodaran Namboothiri': local('kaithapram-damodaran-namboothiri.jpg'),
+    'Vairamuthu': local('vairamuthu.jpg')
   };
 
   const normalize = name => String(name || '').normalize('NFKC').trim().replace(/\s+/g, ' ').toLocaleLowerCase();
+  // Local copies live in assets/artists/ and are served from the site itself.
+  const LOCAL_PORTRAIT = /^assets\/artists\/[A-Za-z0-9._-]+$/;
   const validImageUrl = value => {
+    if (typeof value === 'string' && LOCAL_PORTRAIT.test(value)) return value;
     try {
       const url = new URL(value);
       return url.protocol === 'https:' ? url.href : null;

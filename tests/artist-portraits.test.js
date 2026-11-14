@@ -1,5 +1,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
 const { createPortraitLookup, MANUAL_PORTRAITS, CACHE_KEY } = require('../assets/artist-portraits.js');
 
 function harness({fetchImpl, storage, overrides = {}, now = () => 1000} = {}) {
@@ -12,25 +14,33 @@ function harness({fetchImpl, storage, overrides = {}, now = () => 1000} = {}) {
   return createPortraitLookup({fetchImpl: fetchImpl || (async () => { throw new Error('unexpected fetch'); }), storage: localStorage, overrides, now});
 }
 
-test('verified manual portraits are available for the artists with Commons images', async () => {
-  const lookup = createPortraitLookup({ storage: null });
-  for (const name of [
-    'K. J. Yesudas', 'P. Jayachandran', 'Sadhana Sargam', 'Srinivas',
-    'A. R. Rahman', 'Johnson', 'Vidyasagar',
-    'Kaithapram Damodaran Namboothiri', 'Vairamuthu',
-    'Ilaiyaraaja', 'M. S. Viswanathan'
-  ]) {
-    const url = await lookup.getPortrait(name);
-    assert.match(url, /^https:\/\/commons\.wikimedia\.org\/w\/index\.php\?title=Special:Redirect\/file\//);
+const SAVED_LOCALLY = [
+  'Ilaiyaraaja', 'M. S. Viswanathan', 'Bombay Ravi', 'Sujatha', 'Vaali',
+  'Gireesh Puthenchery', 'Yusufali Kechery', 'Sachithanandan Puzhankara',
+  'S. P. Balasubrahmanyam', 'R. V. Udayakumar',
+  'K. J. Yesudas', 'P. Jayachandran', 'Sadhana Sargam', 'Srinivas',
+  'A. R. Rahman', 'Johnson', 'Vidyasagar',
+  'Kaithapram Damodaran Namboothiri', 'Vairamuthu'
+];
+
+test('manual portraits resolve to saved files without any network access', async () => {
+  const lookup = createPortraitLookup({ storage: null, fetchImpl: async () => { throw new Error('offline'); } });
+  for (const name of SAVED_LOCALLY) {
+    assert.match(await lookup.getPortrait(name), /^assets\/artists\/[a-z0-9-]+\.(jpg|png|webp)$/, name);
   }
-  assert.equal(await lookup.getPortrait('Bombay Ravi'), 'https://upload.wikimedia.org/wikipedia/en/8/8d/Bombay-ravi.jpg');
-  assert.equal(await lookup.getPortrait('Sachithanandan Puzhankara'), null);
+  assert.equal(await lookup.getPortrait('Nobody Listed Here'), null);
 });
 
-test('manual portrait map contains only HTTPS Wikimedia URLs', () => {
-  assert.equal(Object.keys(MANUAL_PORTRAITS).length, 12);
-  assert.ok(Object.values(MANUAL_PORTRAITS).every(url =>
-    url.startsWith('https://commons.wikimedia.org/') || url.startsWith('https://upload.wikimedia.org/')));
+test('saved portraits exist in assets/artists and are credited in SOURCES.md', () => {
+  assert.deepEqual(Object.keys(MANUAL_PORTRAITS).sort(), [...SAVED_LOCALLY].sort());
+  const sources = fs.readFileSync(path.join(__dirname, '..', 'assets', 'artists', 'SOURCES.md'), 'utf8');
+  for (const name of SAVED_LOCALLY) {
+    const url = MANUAL_PORTRAITS[name];
+    assert.ok(fs.existsSync(path.join(__dirname, '..', url)), name + ' is missing ' + url);
+    assert.ok(sources.includes(path.basename(url)), path.basename(url) + ' is not listed in SOURCES.md');
+  }
+  const onDisk = fs.readdirSync(path.join(__dirname, '..', 'assets', 'artists')).filter(f => f !== 'SOURCES.md');
+  assert.deepEqual(onDisk.sort(), SAVED_LOCALLY.map(name => path.basename(MANUAL_PORTRAITS[name])).sort(), 'unused files in assets/artists');
   assert.equal(CACHE_KEY, 'mixtape-artist-portraits-v5');
 });
 
@@ -42,6 +52,21 @@ test('creates readable two-letter initials', () => {
 test('manual portrait overrides take precedence without network access', async () => {
   const lookup = harness({overrides: {'A. R. Rahman': 'https://example.com/arr.jpg'}});
   assert.equal(await lookup.getPortrait('A. R. Rahman'), 'https://example.com/arr.jpg');
+});
+
+test('accepts saved portrait paths but rejects path traversal and other schemes', async () => {
+  const lookup = harness({overrides: {
+    'Saved': 'assets/artists/saved.jpg',
+    'Traversal': 'assets/artists/../secret.jpg',
+    'Elsewhere': 'assets/other/photo.jpg',
+    'Script': 'javascript:alert(1)',
+    'Plain http': 'http://example.com/a.jpg'
+  }});
+  assert.equal(await lookup.getPortrait('Saved'), 'assets/artists/saved.jpg');
+  assert.equal(await lookup.getPortrait('Traversal'), null);
+  assert.equal(await lookup.getPortrait('Elsewhere'), null);
+  assert.equal(await lookup.getPortrait('Script'), null);
+  assert.equal(await lookup.getPortrait('Plain http'), null);
 });
 
 test('caches a successful portrait lookup', async () => {
