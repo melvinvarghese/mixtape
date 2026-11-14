@@ -101,13 +101,25 @@ test('caches misses briefly and retries after the negative cache expires', async
   assert.equal(calls, 2);
 });
 
-test('ignores a cache entry written with an older version', async () => {
-  let calls = 0;
-  const values = new Map([['mixtape-artist-portraits-v1', JSON.stringify({version:0,entries:{'versioned artist':{version:0,savedAt:1000,url:'https://old.example/photo.jpg'}}})]]);
-  const storage = {getItem:key=>values.get(key)??null,setItem:(key,value)=>values.set(key,value),removeItem:key=>values.delete(key)};
-  const lookup = harness({fetchImpl:async()=>{calls++;return {ok:true,json:async()=>({search:[]})};},storage});
-  assert.equal(await lookup.getPortrait('Versioned Artist'), null);
-  assert.equal(calls, 1);
+test('ignores cache data written with an older version', async () => {
+  const makeStorage = payload => {
+    const values = new Map([[CACHE_KEY, JSON.stringify(payload)]]);
+    return {getItem:key=>values.get(key)??null,setItem:(key,value)=>values.set(key,value),removeItem:key=>values.delete(key)};
+  };
+  const entry = version => ({version,savedAt:1000,url:'https://cached.example/photo.jpg'});
+  const run = async payload => {
+    let calls = 0;
+    const lookup = harness({fetchImpl:async()=>{calls++;return {ok:true,json:async()=>({search:[]})};},storage:makeStorage(payload)});
+    const url = await lookup.getPortrait('Versioned Artist');
+    return {url,calls};
+  };
+
+  // Positive control: a current-version entry is served from cache without any fetch.
+  assert.deepEqual(await run({version:5,entries:{'versioned artist':entry(5)}}), {url:'https://cached.example/photo.jpg',calls:0});
+  // Stale outer cache version: the whole cache is discarded and the lookup refetches.
+  assert.deepEqual(await run({version:0,entries:{'versioned artist':entry(5)}}), {url:null,calls:1});
+  // Stale entry version inside a current cache: that entry is ignored and refetched.
+  assert.deepEqual(await run({version:5,entries:{'versioned artist':entry(0)}}), {url:null,calls:1});
 });
 
 

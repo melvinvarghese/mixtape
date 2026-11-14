@@ -30,9 +30,11 @@ test("Blogger JSONP fallback is available when cross-origin fetch is blocked", (
 });
 
 test("artist browsing is available on desktop and mobile navigation", () => {
-  assert.ok(html.includes('data-view="artists"'));
-  assert.ok(inlineScript.includes("function artists()"));
-  assert.ok(inlineScript.includes("data-artist-name="));
+  const artistNavButtons = html.match(/<button[^>]*data-view="artists"/g) || [];
+  assert.equal(artistNavButtons.length, 2, "sidebar and mobile nav should each have an Artists button");
+  assert.ok(inlineScript.includes('view==="artists"'));
+  assert.ok(inlineScript.includes("data-credit-person="));
+  assert.ok(inlineScript.includes("data-portrait-card="));
 });
 
 test("song detail view exposes an optional external lyrics link", () => {
