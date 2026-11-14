@@ -17,17 +17,20 @@ test('verified manual portraits are available for the artists with Commons image
   for (const name of [
     'K. J. Yesudas', 'P. Jayachandran', 'Sadhana Sargam', 'Srinivas',
     'A. R. Rahman', 'Johnson', 'Vidyasagar',
-    'Kaithapram Damodaran Namboothiri', 'Vairamuthu'
+    'Kaithapram Damodaran Namboothiri', 'Vairamuthu',
+    'Ilaiyaraaja', 'M. S. Viswanathan'
   ]) {
     const url = await lookup.getPortrait(name);
     assert.match(url, /^https:\/\/commons\.wikimedia\.org\/w\/index\.php\?title=Special:Redirect\/file\//);
   }
+  assert.equal(await lookup.getPortrait('Bombay Ravi'), 'https://upload.wikimedia.org/wikipedia/en/8/8d/Bombay-ravi.jpg');
   assert.equal(await lookup.getPortrait('Sachithanandan Puzhankara'), null);
 });
 
-test('manual portrait map contains only HTTPS Commons redirects', () => {
-  assert.equal(Object.keys(MANUAL_PORTRAITS).length, 9);
-  assert.ok(Object.values(MANUAL_PORTRAITS).every(url => url.startsWith('https://commons.wikimedia.org/')));
+test('manual portrait map contains only HTTPS Wikimedia URLs', () => {
+  assert.equal(Object.keys(MANUAL_PORTRAITS).length, 12);
+  assert.ok(Object.values(MANUAL_PORTRAITS).every(url =>
+    url.startsWith('https://commons.wikimedia.org/') || url.startsWith('https://upload.wikimedia.org/')));
   assert.equal(CACHE_KEY, 'mixtape-artist-portraits-v5');
 });
 

@@ -14,6 +14,10 @@
     encodeURIComponent(filename) + '&width=480';
 
   const MANUAL_PORTRAITS = {
+    'Ilaiyaraaja': commonsFile('Ilaiyaraaja at the TFPC Press Meet Held Ahead Of The ‘Ilaiyaraaja 75’ Concert.jpg'),
+    'M. S. Viswanathan': commonsFile('Msviswanathan.JPG'),
+    // Hosted on English Wikipedia (not Commons), so it needs a direct upload URL.
+    'Bombay Ravi': 'https://upload.wikimedia.org/wikipedia/en/8/8d/Bombay-ravi.jpg',
     'K. J. Yesudas': commonsFile('K.J. Yesudas.JPG'),
     'P. Jayachandran': commonsFile('P Jayachandran.jpg'),
     'Sadhana Sargam': commonsFile('Sadhana Sargam.jpg'),
