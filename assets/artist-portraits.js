@@ -31,7 +31,13 @@
     'Johnson': local('johnson.jpg'),
     'Vidyasagar': local('vidyasagar.jpg'),
     'Kaithapram Damodaran Namboothiri': local('kaithapram-damodaran-namboothiri.jpg'),
-    'Vairamuthu': local('vairamuthu.jpg')
+    'Vairamuthu': local('vairamuthu.jpg'),
+    'K. S. Chithra': local('k-s-chithra.jpg'),
+    'S. Janaki': local('s-janaki.jpg'),
+    'M. G. Sreekumar': local('m-g-sreekumar.jpg'),
+    'G. Venugopal': local('g-venugopal.webp'),
+    'Hariharan': local('hariharan.jpg'),
+    'Unni Menon': local('unni-menon.jpg')
   };
 
   const normalize = name => String(name || '').normalize('NFKC').trim().replace(/\s+/g, ' ').toLocaleLowerCase();

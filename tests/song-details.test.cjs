@@ -37,6 +37,10 @@ test("artist browsing is available on desktop and mobile navigation", () => {
   assert.ok(inlineScript.includes("data-portrait-card="));
 });
 
+test("artists page lists people with the most songs first", () => {
+  assert.ok(inlineScript.includes("counts.get(b)-counts.get(a)||a.localeCompare(b)"));
+});
+
 test("song detail view exposes an optional external lyrics link", () => {
   assert.ok(html.includes('id="song-detail"'));
   assert.ok(inlineScript.includes("function renderSongDetails(song)"));

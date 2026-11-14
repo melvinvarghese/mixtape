@@ -20,7 +20,8 @@ const SAVED_LOCALLY = [
   'S. P. Balasubrahmanyam', 'R. V. Udayakumar',
   'K. J. Yesudas', 'P. Jayachandran', 'Sadhana Sargam', 'Srinivas',
   'A. R. Rahman', 'Johnson', 'Vidyasagar',
-  'Kaithapram Damodaran Namboothiri', 'Vairamuthu'
+  'Kaithapram Damodaran Namboothiri', 'Vairamuthu',
+  'K. S. Chithra', 'S. Janaki', 'M. G. Sreekumar', 'G. Venugopal', 'Hariharan', 'Unni Menon'
 ];
 
 test('manual portraits resolve to saved files without any network access', async () => {

@@ -27,3 +27,9 @@ Artists not saved here are looked up automatically (or linked from Wikimedia Com
 | Vidyasagar | `vidyasagar.jpg` | <https://commons.wikimedia.org/wiki/File:VidyaSagar.jpg> | See Commons file page |
 | Kaithapram Damodaran Namboothiri | `kaithapram-damodaran-namboothiri.jpg` | <https://commons.wikimedia.org/wiki/File:Kaithapram_Damodaran_Namboothiri.jpg> | See Commons file page |
 | Vairamuthu | `vairamuthu.jpg` | <https://commons.wikimedia.org/wiki/File:Pratibha_Devisingh_Patil_presenting_the_Rajat_Kamal_Award_to_Shri_Vairamuthu_for_the_Best_Lyrics_(Tamil_Thenmerkku_Paruvakkatru),_at_the_58th_National_Film_Awards_function,_in_New_Delhi_on_September_09,_2011_(cropped).jpg> | See Commons file page |
+| K. S. Chithra | `k-s-chithra.jpg` | <https://commons.wikimedia.org/wiki/File:KSChithra.jpg> | See Commons file page |
+| S. Janaki | `s-janaki.jpg` | <https://cf-images.assettype.com/cinemaexpress%2F2026-07-12%2F6jv38rxb%2FS-Janaki.jpg?w=768&auto=format%2Ccompress&fit=max> | Not verified |
+| M. G. Sreekumar | `m-g-sreekumar.jpg` | <https://www.lyricsila.com/wp-content/uploads/MG-Sreekumar-biography-age-songs-music.jpg> | Not verified |
+| G. Venugopal | `g-venugopal.webp` | <https://img.mathrubhumi.com/view/acePublic/alias/contentid/1irl7m392sei9j2qljn/3/g-venugopal.webp?w=1200> | Not verified |
+| Hariharan | `hariharan.jpg` | <https://commons.wikimedia.org/wiki/File:Hariharan_(Singer)_02.jpg> | See Commons file page |
+| Unni Menon | `unni-menon.jpg` | <https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2VhySURsWZQZp7pL_3-m8i8xU8__cLuAmsW2BC_NrHoHBnvEpftAWqRI&s=10> | Not verified |
